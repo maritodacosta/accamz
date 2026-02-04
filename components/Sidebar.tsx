@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { ViewState, User, AppSettings, Transaction } from '../types';
 import { TRANSLATIONS } from '../constants';
@@ -25,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
     { id: 'BRANCHES', label: t.branches, icon: 'fa-sitemap', adminOnly: true },
     { id: 'USERS', label: t.operators, icon: 'fa-users-gear', adminOnly: true },
     { id: 'SETTINGS', label: t.settings, icon: 'fa-gears', adminOnly: true },
+    { id: 'MANUAL', label: 'Buku Petunjuk', icon: 'fa-book-open' },
   ];
 
   return (
@@ -74,7 +74,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
       </nav>
 
       <div className="mt-auto pt-6 border-t border-white/5 space-y-4">
-        {/* Security Badge */}
         <div className="px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
           <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
           <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">{t.secureSession}</p>

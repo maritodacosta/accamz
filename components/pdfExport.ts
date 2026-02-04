@@ -1,9 +1,8 @@
 
-
-import { AppSettings } from '../types'; // Adjusted path to types
-import { TRANSLATIONS } from '../constants'; // Adjusted path to constants
-
-declare const jspdf: any; // Declare jspdf global as it's loaded via CDN
+import { AppSettings } from '../types';
+import { TRANSLATIONS } from '../constants';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 // Helper function to get image dimensions for perfect aspect ratio
 const getImageDimensions = (base64: string): Promise<{ width: number; height: number }> => {
@@ -25,7 +24,6 @@ export const exportToPDF = async (
   branch: string,
   summary?: { label: string; value: string; color?: string }[]
 ) => {
-  const { jsPDF } = jspdf;
   const doc = new jsPDF('p', 'mm', 'a4');
   const t = TRANSLATIONS[settings.language];
 
@@ -106,7 +104,7 @@ export const exportToPDF = async (
   doc.text(`TANGGAL CETAK: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, pageWidth - margin, 60, { align: 'right' });
 
   // 3. TABLE SECTION - NO FOOTER
-  (doc as any).autoTable({
+  autoTable(doc, {
     head: [headers],
     body: data,
     startY: 68,

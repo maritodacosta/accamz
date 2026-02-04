@@ -101,7 +101,7 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions = [], globalTransact
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {cards.map((card, i) => (
-          <div key={i} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+          <div key={i} className="bg-white p-4 sm:p-6 rounded-[2rem] border border-slate-100 shadow-sm relative overflow-hidden group">
             <div className={`w-10 h-10 lg:w-12 lg:h-12 bg-${card.color}-50 text-${card.color}-600 rounded-2xl flex items-center justify-center mb-4 relative z-10`}>
               <i className={`fas ${card.icon} text-lg`}></i>
             </div>

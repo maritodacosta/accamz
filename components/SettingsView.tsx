@@ -173,7 +173,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdateSettings,
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Official Phone</label>
                   <input 
@@ -293,7 +293,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settings, onUpdateSettings,
             </header>
             <form onSubmit={handleSaveAccount} className="p-8 space-y-6 overflow-y-auto">
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Code</label>
                     <input required value={accCode} onChange={(e) => setAccCode(e.target.value)} disabled={!!editingAcc} className="w-full bg-slate-50 border border-slate-100 rounded-xl px-5 py-3 font-black text-xs outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all disabled:opacity-50" />

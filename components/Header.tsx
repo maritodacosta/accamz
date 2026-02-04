@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ user, settings, branches, onLogout, onB
   }, []);
 
   return (
-    <header className="h-20 lg:h-24 bg-white/95 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-12 shrink-0 z-[60]">
+    <header className="h-20 lg:h-24 bg-white/95 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-12 shrink-0 z-[60] print:hidden">
       <div className="flex items-center gap-3 lg:gap-8 min-w-0 flex-1">
         <button onClick={onMenuClick} className="lg:hidden w-10 h-10 flex items-center justify-center text-slate-600 bg-slate-50 rounded-xl shrink-0">
            <i className="fas fa-bars"></i>
@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ user, settings, branches, onLogout, onB
 
       <div className="flex items-center gap-3 lg:gap-10 shrink-0 ml-4">
         {/* Security Indicator */}
-        <div className="hidden lg:flex items-center gap-3 bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100">
+        <div className="hidden sm:flex items-center gap-3 bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100">
            <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></div>
            <div className="text-left leading-none">
               <p className="text-[7px] font-black text-emerald-600 uppercase tracking-widest mb-0.5">{t.secureSession}</p>

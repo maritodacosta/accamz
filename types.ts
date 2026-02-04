@@ -1,8 +1,7 @@
 
-
 export type Language = 'ID' | 'EN' | 'TET';
 export type UserRole = 'ADMIN' | 'USER';
-export type ViewState = 'DASHBOARD' | 'TRANSACTIONS' | 'APPROVALS' | 'REPORTS' | 'SETTINGS' | 'USERS' | 'BRANCHES' | 'INVENTORY';
+export type ViewState = 'DASHBOARD' | 'TRANSACTIONS' | 'APPROVALS' | 'REPORTS' | 'SETTINGS' | 'USERS' | 'BRANCHES' | 'INVENTORY' | 'MANUAL';
 export type TransactionStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type AccountType = 'ASSET' | 'LIABILITY' | 'EQUITY' | 'REVENUE' | 'EXPENSE' | 'KASBON';
 
@@ -11,22 +10,22 @@ export interface BranchData {
   name: string;
   location: string;
   code: string;
-  created_at?: string; // For backend response
-  updated_at?: string; // For backend response
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface User {
   id: string;
   username: string;
-  password?: string; // Only for sending, not stored/retrieved directly
-  password_hash?: string; // For backend internal use
+  password?: string;
+  password_hash?: string;
   name: string;
   role: UserRole;
-  branch: string; // Refers to BranchData.name
-  branch_name?: string; // Backend field name if different
+  branch: string;
+  branch_name?: string;
   avatar?: string;
-  created_at?: string; // For backend response
-  updated_at?: string; // For backend response
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface InventoryItem {
@@ -34,51 +33,51 @@ export interface InventoryItem {
   code: string;
   category: string;
   referenceNumber?: string;
-  reference_number?: string; // Backend field name if different
-  stockIn: number; // Stok Masuk
-  stock_in?: number; // Backend field name if different
-  stockOut: number; // Stok Keluar
-  stock_out?: number; // Backend field name if different
+  reference_number?: string;
+  stockIn: number;
+  stock_in?: number;
+  stockOut: number;
+  stock_out?: number;
   branch: string;
-  branch_name?: string; // Backend field name if different
-  updatedAt: number; // Frontend timestamp
-  updated_at?: string; // Backend field name if different (string ISO date)
-  created_at?: string; // For backend response
+  branch_name?: string;
+  updatedAt: number;
+  updated_at?: string;
+  created_at?: string;
 }
 
 export interface Account {
   code: string;
   name: { [key in Language]: string };
-  name_id?: string; // Backend field for ID name
-  name_en?: string; // Backend field for EN name
-  name_tet?: string; // Backend field for TET name
+  name_id?: string;
+  name_en?: string;
+  name_tet?: string;
   type: AccountType;
   balanceType: 'DEBIT' | 'CREDIT';
-  created_at?: string; // For backend response
-  updated_at?: string; // For backend response
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface LedgerEntry {
-  id?: number; // Backend might provide an ID
+  id?: number;
   accountId: string;
-  account_code?: string; // Backend field name if different
+  account_code?: string;
   debit: number;
   credit: number;
-  created_at?: string; // For backend response
-  updated_at?: string; // For backend response
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface AuditLog {
   id?: number;
   action: 'CREATED' | 'UPDATED' | 'APPROVED' | 'REJECTED' | 'LOGIN' | 'LOGOUT' | 'SETTINGS_UPDATED' | 'USER_MANAGEMENT' | 'BRANCH_MANAGEMENT' | 'INVENTORY_MUTATION' | 'ACCOUNT_MANAGEMENT';
   userId: string;
-  user_id?: string; // Backend field name if different
+  user_id?: string;
   userName: string;
-  user_name?: string; // Backend field name if different
-  timestamp: number; // Frontend timestamp
-  created_at?: string; // Backend field name if different (string ISO date)
+  user_name?: string;
+  timestamp: number;
+  created_at?: string;
   details?: string;
-  transaction_id?: string; // If logs are per-transaction
+  transaction_id?: string;
 }
 
 export interface Transaction {
@@ -86,22 +85,22 @@ export interface Transaction {
   date: string;
   description: string;
   referenceNumber?: string;
-  reference_number?: string; // Backend field name if different
+  reference_number?: string;
   branch: string;
-  branch_name?: string; // Backend field name if different
+  branch_name?: string;
   userId: string;
-  user_id?: string; // Backend field name if different
+  user_id?: string;
   status: TransactionStatus;
   type: 'GENERAL' | 'EXPENSE' | 'KASBON' | 'CLOSE_KAS';
   entries: LedgerEntry[];
   approvedBy?: string;
-  approved_by_user_id?: string; // Backend field name if different
-  createdAt: number; // Frontend timestamp
-  created_at?: string; // Backend field name if different (string ISO date)
-  updated_at?: string; // For backend response
-  logs: AuditLog[]; // This might be handled by a separate audit_logs table
-  isHqEntry?: boolean; // Indicates if created by Admin/HQ
-  is_hq_entry?: boolean; // Backend field name if different
+  approved_by_user_id?: string;
+  createdAt: number;
+  created_at?: string;
+  updated_at?: string;
+  logs: AuditLog[];
+  isHqEntry?: boolean;
+  is_hq_entry?: boolean;
 }
 
 export interface AppSettings {
@@ -118,10 +117,9 @@ export interface AppSettings {
   companyEmail?: string;
 }
 
-// Backend might return settings as an array of objects
 export interface SettingEntry {
   key_name: string;
-  value: string; // Values are strings, need to be converted to boolean/number
-  created_at?: string; // For backend response
-  updated_at?: string; // For backend response
+  value: string;
+  created_at?: string;
+  updated_at?: string;
 }

@@ -53,17 +53,44 @@
             background: #CBD5E1;
             border-radius: 10px;
         }
+        
+        /* Print-specific styles */
+        @media print {
+            .print\:hidden {
+                display: none !important;
+            }
+            body, #root {
+                overflow: visible !important;
+                height: auto !important;
+                background: #fff !important;
+            }
+            main {
+                overflow: visible !important;
+                padding: 0 !important;
+            }
+            /* Reset flex containers to simple blocks */
+            #root > div {
+                display: block !important;
+            }
+            #root > div > div.flex-1 {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+        }
     </style>
 <script type="importmap">
 {
   "imports": {
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "recharts": "https://esm.sh/recharts@^3.7.0",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.94.0",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.3"
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.94.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.3",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@^3.8.2"
   }
 }
 </script>
@@ -71,7 +98,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite akan menangani import module ini -->
+    <!-- Vite handles the module import automatically -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

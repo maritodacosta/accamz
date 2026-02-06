@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   User, Transaction, AppSettings, ViewState, 
@@ -28,6 +27,7 @@ const App: React.FC = () => {
 
   const [activeView, setActiveView] = useState<ViewState>('DASHBOARD');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => localStorage.getItem('theme') === 'dark');
   
   const [settings, setSettings] = useState<AppSettings>({
     language: 'ID', currency: 'USD', dateFormat: 'DD/MM/YYYY',
@@ -44,8 +44,17 @@ const App: React.FC = () => {
   const [isLoadingApp, setIsLoadingApp] = useState(true);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
-  const IDLE_TIMEOUT = 15 * 60 * 1000;
-  
+  // Apply dark mode class to html element
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
   const handleLogout = useCallback(() => {
     setIsAuthenticated(false);
     setCurrentUser(null);
@@ -72,12 +81,6 @@ const App: React.FC = () => {
           callApi<any[]>('transactions', 'GET'),
           callApi<any[]>('inventory', 'GET'),
         ]);
-
-        if (!usersRes.success) {
-           if (usersRes.message?.includes("fetch")) {
-              throw new Error("Network Error: Could not reach Supabase.");
-           }
-        }
 
         if (settingsRes.success && settingsRes.data) {
           const fetchedSettings: any = {};
@@ -127,24 +130,6 @@ const App: React.FC = () => {
     };
     loadInitialData();
   }, [isAuthenticated]); 
-
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    let timeoutId: number;
-    const resetTimer = () => {
-      window.clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(() => {
-        handleLogout();
-      }, IDLE_TIMEOUT);
-    };
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
-    events.forEach(e => document.addEventListener(e, resetTimer));
-    resetTimer();
-    return () => {
-      window.clearTimeout(timeoutId);
-      events.forEach(e => document.removeEventListener(e, resetTimer));
-    };
-  }, [isAuthenticated, handleLogout, IDLE_TIMEOUT]);
 
   const handleLogin = (user: User, token: string) => { 
     const loginUser = { ...user };
@@ -197,7 +182,7 @@ const App: React.FC = () => {
   const renderContent = () => {
     const isAdmin = currentUser?.role === 'ADMIN';
     switch (activeView) {
-      case 'DASHBOARD': return <Dashboard transactions={periodTransactions} globalTransactions={branchTransactions} user={currentUser!} settings={settings} accounts={accounts} />;
+      case 'DASHBOARD': return <Dashboard transactions={periodTransactions} globalTransactions={branchTransactions} user={currentUser!} settings={settings} accounts={accounts} isDarkMode={isDarkMode} />;
       case 'TRANSACTIONS': return <TransactionManager transactions={branchTransactions} periodTransactions={periodTransactions} onAdd={addTransaction} user={currentUser!} settings={settings} accounts={accounts} branches={branches} />;
       case 'INVENTORY': return <InventoryView inventory={inventory} onUpdateInventory={() => {}} user={currentUser!} settings={settings} />;
       case 'APPROVALS': return isAdmin ? <ApprovalQueue transactions={transactions} onUpdateTransaction={updateTransaction} settings={settings} accounts={accounts} /> : null;
@@ -214,22 +199,34 @@ const App: React.FC = () => {
     return <Login onLogin={handleLogin} settings={settings} />;
   }
 
-  if (connectionError) {
-    return <div className="p-20 text-center font-black uppercase text-rose-600">{connectionError}</div>;
-  }
-
-  if (isLoadingApp) {
-    return <div className="h-screen flex items-center justify-center font-black uppercase tracking-widest animate-pulse">Synchronizing Node...</div>;
-  }
-
   return (
-    <div className="flex h-screen bg-[#F8FAFC] text-slate-900 font-sans overflow-hidden print:block">
-      <div className={`fixed inset-0 z-40 lg:relative lg:z-0 lg:flex ${isSidebarOpen ? 'block' : 'hidden lg:block'} print:hidden`}>
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans overflow-hidden transition-colors duration-300">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[70] lg:hidden animate-in fade-in duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
+      {/* Sidebar - Desktop Always, Mobile Slide */}
+      <div className={`fixed inset-y-0 left-0 z-[80] lg:relative lg:z-0 lg:flex transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} w-72 lg:w-80 print:hidden`}>
         <Sidebar activeView={activeView} onViewChange={(v) => { setActiveView(v); setIsSidebarOpen(false); }} user={currentUser} settings={settings} transactions={transactions} />
       </div>
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden print:block">
-        <Header user={currentUser} settings={settings} branches={branches} onLogout={handleLogout} onBranchSwitch={(b) => setCurrentUser({...currentUser, branch: b})} onUpdateSettings={updateSettingsInApp} onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 overflow-y-auto bg-slate-50/50 pb-20 lg:pb-0 print:overflow-visible print:bg-white">
+
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        <Header 
+          user={currentUser} 
+          settings={settings} 
+          branches={branches} 
+          onLogout={handleLogout} 
+          onBranchSwitch={(b) => setCurrentUser({...currentUser, branch: b})} 
+          onUpdateSettings={updateSettingsInApp} 
+          onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        />
+        <main className="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/30 print:bg-white print:overflow-visible no-scrollbar transition-colors duration-300">
           {renderContent()}
         </main>
       </div>

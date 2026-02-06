@@ -6,6 +6,11 @@
     <title>Accounting Amizade - Premium ERP</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts: Inter -->
@@ -20,6 +25,11 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             width: 100vw;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark body {
+            background-color: #020617;
+            color: #F8FAFC;
         }
         #root {
             width: 100%;
@@ -35,12 +45,6 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-        /* Fix for Recharts visibility in some browsers */
-        .recharts-responsive-container {
-            width: 100% !important;
-            height: 100% !important;
-            min-height: 200px;
-        }
         /* Mobile scrollbar styling */
         ::-webkit-scrollbar {
             width: 4px;
@@ -53,8 +57,11 @@
             background: #CBD5E1;
             border-radius: 10px;
         }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
         
-        /* Print-specific styles */
+        /* Print-specific styles - CRITICAL FOR PDF EXPORT */
         @media print {
             .print\:hidden {
                 display: none !important;
@@ -63,20 +70,25 @@
                 overflow: visible !important;
                 height: auto !important;
                 background: #fff !important;
+                display: block !important;
+                color: #000 !important;
             }
             main {
                 overflow: visible !important;
                 padding: 0 !important;
-            }
-            /* Reset flex containers to simple blocks */
-            #root > div {
+                margin: 0 !important;
                 display: block !important;
             }
-            #root > div > div.flex-1 {
-                display: block !important;
-                height: auto !important;
-                overflow: visible !important;
+            .max-w-4xl, .max-w-7xl {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
             }
+            .flex { display: block !important; }
+            .grid { display: block !important; }
+            header, aside { display: none !important; }
         }
     </style>
 <script type="importmap">
@@ -98,7 +110,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Vite handles the module import automatically -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

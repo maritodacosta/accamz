@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ViewState, User, AppSettings, Transaction } from '../types';
 import { TRANSLATIONS } from '../constants';
@@ -28,8 +27,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
   ];
 
   return (
-    <aside className="w-72 lg:w-80 bg-slate-900 h-full flex flex-col p-6 lg:p-8 text-white shrink-0 shadow-2xl z-20 relative">
-      <div className="flex items-center gap-4 mb-12 px-2">
+    <aside className="w-full lg:w-80 bg-slate-900 h-full flex flex-col p-6 lg:p-8 text-white shrink-0 shadow-2xl z-20 overflow-hidden">
+      <div className="flex items-center gap-4 mb-8 lg:mb-12 px-2">
         <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden border border-white/5">
           {settings.companyLogo ? (
             <img src={settings.companyLogo} className="w-full h-full object-contain p-1.5" alt="Logo" />
@@ -43,8 +42,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
         </div>
       </div>
 
-      <nav className="space-y-2 flex-1 overflow-y-auto no-scrollbar">
-        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 px-4">Navigation</p>
+      <nav className="space-y-1.5 flex-1 overflow-y-auto no-scrollbar">
+        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 px-4 hidden lg:block">Navigation</p>
         {navItems.map((item) => {
           if (item.adminOnly && user.role !== 'ADMIN') return null;
           const isActive = activeView === item.id;
@@ -64,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
                 <span className="uppercase tracking-[0.15em]">{item.label}</span>
               </div>
               {item.id === 'APPROVALS' && pendingCount > 0 && (
-                <span className="bg-rose-500 text-white text-[8px] font-black px-2 py-0.5 rounded-lg animate-pulse">
+                <span className="bg-rose-500 text-white text-[8px] font-black px-2 py-0.5 rounded-lg">
                   {pendingCount}
                 </span>
               )}
@@ -74,18 +73,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, user, setti
       </nav>
 
       <div className="mt-auto pt-6 border-t border-white/5 space-y-4">
-        <div className="px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.5)]"></div>
-          <p className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">{t.secureSession}</p>
-        </div>
-
         <div className="p-4 bg-white/5 rounded-2xl border border-white/5 flex items-center gap-3">
-           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 overflow-hidden">
-              {settings.companyLogo ? (
-                <img src={settings.companyLogo} className="w-full h-full object-cover" alt="User Avatar" />
-              ) : (
-                <span className="text-indigo-400 font-black text-xs uppercase">{user.name.charAt(0)}</span>
-              )}
+           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+              <span className="text-indigo-400 font-black text-xs uppercase">{user.name.charAt(0)}</span>
            </div>
            <div className="min-w-0">
               <p className="text-[10px] font-black uppercase tracking-widest truncate">{user.name}</p>
